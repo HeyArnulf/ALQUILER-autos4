@@ -107,12 +107,18 @@
 .app-shell {
   display: flex;
   width: 100%;
+  max-width: 100%;
   flex-direction: column;
   min-height: 100vh;
   background: #050505;
   color: #f5f5f5;
   font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
   text-align: left;
+  overflow-x: hidden;
+}
+
+.app-shell * {
+  box-sizing: border-box;
 }
 
 .app-shell > main {
@@ -1228,11 +1234,74 @@ input {
   color: #a3a3a3;
 }
 
+.cat-card-meta {
+  display: block;
+  margin-top: 4px;
+  color: #737373;
+  font-size: 0.76rem;
+}
+
 .cat-card-specs {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 14px;
+}
+
+.cat-card-pricing {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 11px 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  background: rgba(0,0,0,0.2);
+}
+
+.cat-card-pricing > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.cat-card-price-label {
+  color: #a3a3a3;
+  font-size: 0.7rem;
+}
+
+.cat-card-pricing strong {
+  color: #fff;
+  font-size: 1.08rem;
+}
+
+.cat-card-pricing strong span {
+  color: #a3a3a3;
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+.cat-card-hourly {
+  display: grid;
+  gap: 3px;
+  justify-items: end;
+  color: #a3a3a3;
+  font-size: 0.73rem;
+  text-align: right;
+}
+
+.cat-card-hourly small {
+  max-width: 150px;
+  color: #737373;
+  font-size: 0.65rem;
+  line-height: 1.35;
+}
+
+.cat-card-review {
+  margin: -4px 0 12px;
+  color: #a3a3a3;
+  font-size: 0.72rem;
 }
 
 .cat-spec-item {
@@ -1309,6 +1378,7 @@ input {
   grid-template-columns: minmax(260px, 40%) minmax(0, 1fr);
   gap: 0;
   width: min(900px, 100%);
+  max-height: min(90vh, 820px);
   background: #121212;
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 20px;
@@ -1343,10 +1413,13 @@ input {
 }
 
 .fleet-details-content {
+  min-height: 0;
+  min-width: 0;
   padding: 32px 28px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow-y: auto;
 }
 
 .fleet-details-eyebrow {
@@ -1384,6 +1457,93 @@ input {
   gap: 10px;
   color: #e5e5e5;
   font-weight: 500;
+}
+
+.fleet-details-review {
+  padding: 10px 12px;
+  margin: 0 0 16px;
+  border: 1px solid #383838;
+  border-radius: 8px;
+  background: #191919;
+  color: #bdbdbd;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.fleet-details-pricing {
+  padding: 14px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  background: #0c0c0c;
+}
+
+.fleet-details-pricing h3 {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.fleet-details-price-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #282828;
+}
+
+.fleet-details-price-main span,
+.fleet-details-price-period span {
+  color: #a3a3a3;
+  font-size: 0.76rem;
+}
+
+.fleet-details-price-main strong {
+  color: #dc2626;
+  font-size: 1.1rem;
+}
+
+.fleet-details-hourly {
+  margin: 10px 0;
+  color: #bdbdbd;
+  font-size: 0.77rem;
+}
+
+.fleet-details-hourly small {
+  display: block;
+  margin-top: 3px;
+  color: #777;
+}
+
+.fleet-details-price-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fleet-details-price-period {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #151515;
+}
+
+.fleet-details-price-period strong {
+  color: #ededed;
+  font-size: 0.9rem;
+}
+
+.fleet-details-price-period small,
+.fleet-details-tier-note {
+  color: #777;
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.fleet-details-tier-note {
+  margin: 10px 0 0;
 }
 
 .fleet-details-action {
@@ -1427,5 +1587,1959 @@ input {
 
   .fleet-details-content {
     padding: 24px 18px 20px;
+  }
+
+  .cat-card-pricing {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cat-card-hourly {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .fleet-details-modal {
+    max-height: 90vh;
+  }
+}
+
+/* ========================================================
+   PANEL DE ADMINISTRACIÓN (extensión)
+   --------------------------------------------------------
+   Estilos del panel admin unificado para las vistas
+   "Resumen" (AdminDashboard) y "Gestión" (AdminGestion),
+   y también para "Mis reservas" (Dashboard del usuario).
+   Reutiliza la paleta oscura con acentos rojos del sitio.
+   ======================================================== */
+
+/* Contenedor general de las páginas administrativas */
+.admin-page {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 40px 32px 64px;
+  color: #f5f5f5;
+}
+
+/* Cabecera de página: título + descripción + chip opcional */
+.admin-page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.admin-page-title {
+  margin: 0 0 8px;
+  color: #fff;
+  font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  font-size: 1.9rem;
+  letter-spacing: -0.5px;
+}
+
+.admin-page-subtitle {
+  margin: 0;
+  color: #a3a3a3;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 640px;
+}
+
+/* Chip "En vivo" / contadores */
+.admin-page-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: 999px;
+  background: rgba(220, 38, 38, 0.12);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Rejilla de tarjetas de métricas */
+.admin-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.admin-metric-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #262626;
+  border-radius: 14px;
+  background: #111;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-metric-card:hover {
+  transform: translateY(-2px);
+  border-color: #3a3a3a;
+}
+
+.admin-metric-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: rgba(220, 38, 38, 0.14);
+  color: #dc2626;
+}
+
+/* Variantes de color para el icono de cada métrica */
+.admin-metric-card.is-blue .admin-metric-icon {
+  background: rgba(37, 99, 235, 0.16);
+  color: #60a5fa;
+}
+
+.admin-metric-card.is-green .admin-metric-icon {
+  background: rgba(74, 222, 128, 0.16);
+  color: #4ade80;
+}
+
+.admin-metric-card.is-amber .admin-metric-icon {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+}
+
+.admin-metric-card.is-red .admin-metric-icon {
+  background: rgba(220, 38, 38, 0.16);
+  color: #f87171;
+}
+
+.admin-metric-card.is-gray .admin-metric-icon {
+  background: rgba(100, 116, 139, 0.18);
+  color: #94a3b8;
+}
+
+.admin-metric-card.is-purple .admin-metric-icon {
+  background: rgba(168, 85, 247, 0.16);
+  color: #c084fc;
+}
+
+.admin-metric-label {
+  display: block;
+  color: #8a8a8a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.admin-metric-value {
+  display: block;
+  margin-top: 4px;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Tarjeta contenedora genérica (tablas, gráficas, bloques) */
+.admin-card {
+  padding: 24px;
+  margin-bottom: 26px;
+  border: 1px solid #262626;
+  border-radius: 16px;
+  background: #111;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.admin-card-title {
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.admin-card-title.no-margin {
+  margin: 0;
+}
+
+/* Rejilla para las 4 gráficas (2x2) */
+.admin-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  margin-bottom: 26px;
+}
+
+.admin-chart-card {
+  margin-bottom: 0;
+}
+
+.admin-chart-body {
+  position: relative;
+  height: 280px;
+}
+
+.admin-chart-body.is-doughnut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tablas del panel */
+.admin-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.admin-table thead th {
+  padding: 12px 14px;
+  border-bottom: 1px solid #333;
+  color: #8a8a8a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-table tbody td {
+  padding: 14px;
+  border-bottom: 1px solid #1c1c1c;
+  color: #d4d4d4;
+  vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-table .is-right {
+  text-align: right;
+}
+
+.admin-cell-strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.admin-cell-muted {
+  color: #9a9a9a;
+}
+
+.admin-cell-price {
+  color: #4ade80;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.admin-empty {
+  padding: 36px 14px !important;
+  color: #8a8a8a;
+  text-align: center;
+}
+
+/* Barra superior de sección: título + acciones/filtros */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.admin-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Campo de búsqueda con icono */
+.admin-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  background: #0d0d0d;
+  color: #8a8a8a;
+}
+
+.admin-search input {
+  width: 220px;
+  padding: 10px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.86rem;
+}
+
+/* Selector de filtro */
+.admin-filter {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  outline: none;
+  background: #0d0d0d;
+  color: #e5e5e5;
+  font-family: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.admin-search:focus-within,
+.admin-filter:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
+}
+
+/* Pestañas de la gestión */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  padding: 6px;
+  border: 1px solid #262626;
+  border-radius: 12px;
+  background: #0d0d0d;
+  flex-wrap: wrap;
+}
+
+.admin-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #a3a3a3;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-tab.is-active {
+  background: #dc2626;
+  color: #fff;
+}
+
+.admin-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #f59e0b;
+  color: #1a1a1a;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+/* Botones del panel */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+}
+
+.admin-btn:hover {
+  transform: translateY(-1px);
+}
+
+.admin-btn-primary {
+  background: #dc2626;
+  color: #fff;
+}
+
+.admin-btn-primary:hover {
+  background: #b91c1c;
+}
+
+.admin-btn-ghost {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: transparent;
+  color: #d4d4d4;
+}
+
+.admin-btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-btn-danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.admin-btn-danger:hover {
+  background: #b91c1c;
+}
+
+.admin-btn-approve {
+  background: rgba(74, 222, 128, 0.14);
+  border-color: rgba(74, 222, 128, 0.35);
+  color: #4ade80;
+}
+
+.admin-btn-approve:hover {
+  background: rgba(74, 222, 128, 0.22);
+}
+
+.admin-btn-reject {
+  background: rgba(220, 38, 38, 0.14);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #fca5a5;
+}
+
+.admin-btn-reject:hover {
+  background: rgba(220, 38, 38, 0.22);
+}
+
+/* Acciones con íconos + tooltip */
+.admin-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.admin-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: #161616;
+  color: #d4d4d4;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-icon-btn:hover {
+  background: #222;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.admin-icon-btn.is-danger:hover {
+  background: rgba(220, 38, 38, 0.18);
+  border-color: rgba(220, 38, 38, 0.5);
+  color: #fca5a5;
+}
+
+.admin-icon-btn.is-approve:hover {
+  background: rgba(74, 222, 128, 0.16);
+  border-color: rgba(74, 222, 128, 0.5);
+  color: #4ade80;
+}
+
+/* Tooltip CSS basado en data-tooltip */
+.admin-icon-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 20;
+}
+
+.admin-icon-btn:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Lista de aprobaciones pendientes */
+.admin-approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-approval-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid #262626;
+  border-radius: 12px;
+  background: #0d0d0d;
+  flex-wrap: wrap;
+}
+
+.admin-approval-info {
+  display: flex;
+  flex: 1;
+  min-width: 180px;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-approval-info strong {
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.admin-approval-info span {
+  color: #9a9a9a;
+  font-size: 0.82rem;
+}
+
+/* Badges de estado con colores consistentes */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.status-badge.is-ok {
+  background: rgba(74, 222, 128, 0.14);
+  border-color: rgba(74, 222, 128, 0.35);
+  color: #4ade80;
+}
+
+.status-badge.is-warning {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+
+.status-badge.is-info {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: rgba(37, 99, 235, 0.4);
+  color: #60a5fa;
+}
+
+.status-badge.is-neutral {
+  background: rgba(148, 163, 184, 0.14);
+  border-color: rgba(148, 163, 184, 0.32);
+  color: #cbd5e1;
+}
+
+.status-badge.is-danger {
+  background: rgba(220, 38, 38, 0.16);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #fca5a5;
+}
+
+/* Modales estilizados */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.admin-modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: min(90vh, 780px);
+  overflow-y: auto;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: #111;
+  color: #f5f5f5;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+}
+
+.admin-modal.is-small {
+  max-width: 420px;
+  text-align: center;
+}
+
+.admin-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.admin-modal-head h2 {
+  margin: 0;
+  color: #fff;
+  font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  font-size: 1.25rem;
+}
+
+.admin-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.admin-modal-close:hover {
+  background: rgba(220, 38, 38, 0.2);
+}
+
+/* Formulario dentro del modal */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.admin-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-form-field.is-full {
+  grid-column: 1 / -1;
+}
+
+.admin-form-field span {
+  color: #d4d4d4;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.admin-form-field input,
+.admin-form-field select,
+.admin-form-field textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  outline: none;
+  background: #0d0d0d;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.88rem;
+}
+
+.admin-form-field textarea {
+  resize: vertical;
+  min-height: 68px;
+}
+
+.admin-form-field input:focus,
+.admin-form-field select:focus,
+.admin-form-field textarea:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
+}
+
+.admin-form-error {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 0.83rem;
+}
+
+.admin-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.admin-modal-actions.is-center {
+  justify-content: center;
+}
+
+/* Contenido del diálogo de confirmación */
+.admin-confirm-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.14);
+  color: #fbbf24;
+}
+
+.admin-confirm-title {
+  margin: 0 0 10px;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.admin-confirm-text {
+  margin: 0 0 24px;
+  color: #a3a3a3;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+/* Notificaciones toast */
+.admin-toast-container {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 240px;
+  max-width: 360px;
+  padding: 13px 16px;
+  border: 1px solid #333;
+  border-left-width: 4px;
+  border-radius: 10px;
+  background: #161616;
+  color: #f5f5f5;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  animation: admin-toast-in 0.25s ease;
+}
+
+.admin-toast.is-success {
+  border-left-color: #4ade80;
+}
+
+.admin-toast.is-success .admin-toast-icon {
+  color: #4ade80;
+}
+
+.admin-toast.is-error {
+  border-left-color: #dc2626;
+}
+
+.admin-toast.is-error .admin-toast-icon {
+  color: #fca5a5;
+}
+
+.admin-toast.is-info {
+  border-left-color: #2563eb;
+}
+
+.admin-toast.is-info .admin-toast-icon {
+  color: #60a5fa;
+}
+
+.admin-toast-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+@keyframes admin-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Responsive del panel admin ---------- */
+@media (max-width: 980px) {
+  .admin-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-page {
+    padding: 28px 16px 48px;
+  }
+
+  .admin-page-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-search input {
+    width: 140px;
+  }
+
+  .admin-toast-container {
+    right: 12px;
+    left: 12px;
+    bottom: 12px;
+  }
+
+  .admin-toast {
+    max-width: none;
+  }
+
+  .admin-chart-body {
+    height: 220px;
+  }
+}
+
+/* ========================================================
+   BOTÓN "MI CUENTA" DEL ENCABEZADO
+   --------------------------------------------------------
+   Se muestra cuando NO hay sesión activa, como acceso al login.
+   ======================================================== */
+.site-account-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 20px;
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(220, 38, 38, 0.18), rgba(220, 38, 38, 0.08));
+  color: #fff;
+  font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.site-account-button:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(220, 38, 38, 0.3), rgba(220, 38, 38, 0.14));
+}
+
+/* ========================================================
+   PANEL DE USUARIO — Elementos específicos de "Mis reservas"
+   --------------------------------------------------------
+   Aviso de reservas pendientes, pasos explicativos y el
+   badge de estado con icono integrado.
+   ======================================================== */
+
+/* Aviso destacado cuando hay reservas pendientes de aprobación */
+.admin-user-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  margin-bottom: 26px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.admin-user-notice.is-warning {
+  color: #fbbf24;
+}
+
+.admin-user-notice strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #fef3c7;
+  font-size: 0.92rem;
+}
+
+.admin-user-notice p {
+  margin: 0;
+  color: #fde68a;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* Badge con icono dentro (para el estado de aprobación del usuario) */
+.status-badge svg,
+.status-badge i {
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+/* Pasos explicativos: cómo funciona la aprobación */
+.admin-user-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-user-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #262626;
+  border-radius: 12px;
+  background: #0d0d0d;
+}
+
+.admin-user-step-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
+.admin-user-step-icon.is-amber {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+}
+
+.admin-user-step-icon.is-green {
+  background: rgba(74, 222, 128, 0.16);
+  color: #4ade80;
+}
+
+.admin-user-step-icon.is-blue {
+  background: rgba(37, 99, 235, 0.16);
+  color: #60a5fa;
+}
+
+.admin-user-step-icon.is-red {
+  background: rgba(220, 38, 38, 0.16);
+  color: #fca5a5;
+}
+
+.admin-user-step strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #fff;
+  font-size: 0.88rem;
+}
+
+.admin-user-step p {
+  margin: 0;
+  color: #9a9a9a;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .admin-user-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+.reservation-list {
+  display: grid;
+  gap: 14px;
+}
+
+.reservation-list-empty {
+  margin: 0;
+  padding: 28px 12px;
+  color: #a3a3a3;
+  text-align: center;
+}
+
+.reservation-item {
+  padding: 18px;
+  border: 1px solid #292929;
+  border-radius: 14px;
+  background: #0d0d0d;
+}
+
+.reservation-item-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.reservation-car-image {
+  width: 124px;
+  height: 82px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: #191919;
+  object-fit: cover;
+}
+
+.reservation-car-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.reservation-id {
+  color: #999;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.reservation-car-info h3 {
+  margin: 5px 0 3px;
+  color: #fff;
+  font-size: 1.03rem;
+}
+
+.reservation-category {
+  color: #999;
+  font-size: 0.82rem;
+}
+
+.reservation-status {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reservation-inspect-button,
+.reservation-modal-done {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.12);
+  color: #fca5a5;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.reservation-inspect-button:hover,
+.reservation-modal-done:hover {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.22);
+}
+
+.reservation-progress {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 20px 0 16px;
+  list-style: none;
+}
+
+.reservation-progress li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  color: #777;
+  font-size: 0.78rem;
+}
+
+.reservation-progress li:not(:last-child)::after {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  right: 0;
+  height: 1px;
+  background: #333;
+  content: '';
+  transform: translateX(8px);
+}
+
+.reservation-progress li.is-complete,
+.reservation-progress li.is-current {
+  color: #e5e5e5;
+}
+
+.reservation-progress li.is-complete::after {
+  background: #16a34a;
+}
+
+.reservation-progress li.is-current .reservation-progress-dot {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.18);
+  color: #fca5a5;
+}
+
+.reservation-progress li.is-complete .reservation-progress-dot {
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.14);
+  color: #4ade80;
+}
+
+.reservation-progress-dot {
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 1px solid #393939;
+  border-radius: 50%;
+  background: #111;
+  color: #777;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.reservation-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 13px;
+  border-top: 1px solid #242424;
+}
+
+.reservation-date-summary,
+.reservation-countdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a3a3a3;
+  font-size: 0.82rem;
+}
+
+.reservation-countdown {
+  color: #fbbf24;
+}
+
+.reservation-countdown strong {
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.reservation-countdown.is-started {
+  color: #4ade80;
+}
+
+.reservation-terminal {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid #242424;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+
+.reservation-terminal.is-danger {
+  color: #fca5a5;
+}
+
+.reservation-modal-backdrop {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.reservation-modal {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(220px, 42%) minmax(0, 1fr);
+  width: min(760px, 100%);
+  max-height: min(88vh, 720px);
+  overflow: auto;
+  border: 1px solid #303030;
+  border-radius: 16px;
+  background: #111;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+}
+
+.reservation-modal-image {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  background: #191919;
+  object-fit: cover;
+}
+
+.reservation-modal-content {
+  padding: 32px 26px 26px;
+}
+
+.reservation-modal-content h2 {
+  margin: 8px 0 4px;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.reservation-modal-category {
+  margin: 0 0 16px;
+  color: #999;
+  font-size: 0.88rem;
+}
+
+.reservation-modal-close {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #424242;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+}
+
+.reservation-details-list {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.reservation-details-list > div {
+  padding-bottom: 11px;
+  border-bottom: 1px solid #292929;
+}
+
+.reservation-details-list dt {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 5px;
+  color: #999;
+  font-size: 0.76rem;
+}
+
+.reservation-details-list dd {
+  margin: 0;
+  color: #f5f5f5;
+  font-size: 0.87rem;
+}
+
+.reservation-modal-done {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .reservation-item {
+    padding: 14px;
+  }
+
+  .reservation-item-main {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .reservation-car-image {
+    width: 88px;
+    height: 70px;
+  }
+
+  .reservation-status {
+    align-items: flex-end;
+  }
+
+  .reservation-status .status-badge {
+    font-size: 0.7rem;
+  }
+
+  .reservation-inspect-button {
+    padding: 8px;
+    font-size: 0.74rem;
+  }
+
+  .reservation-progress {
+    gap: 4px;
+  }
+
+  .reservation-progress li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.7rem;
+  }
+
+  .reservation-progress li:not(:last-child)::after {
+    top: 14px;
+    left: 24px;
+    transform: translateX(4px);
+  }
+
+  .reservation-item-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reservation-modal {
+    grid-template-columns: 1fr;
+  }
+
+  .reservation-modal-image {
+    height: 210px;
+    min-height: 210px;
+  }
+
+  .reservation-modal-content {
+    padding: 22px 18px;
+  }
+}
+
+.reservation-dashboard .admin-metrics .admin-metric-icon {
+  background: #1c1c1c;
+  color: #bdbdbd;
+}
+
+.reservation-dashboard .admin-user-notice,
+.reservation-dashboard .admin-user-notice.is-warning {
+  border-color: #333;
+  background: #111;
+  color: #bdbdbd;
+}
+
+.reservation-dashboard .admin-user-notice strong {
+  color: #ededed;
+}
+
+.reservation-dashboard .admin-user-notice p {
+  color: #a3a3a3;
+}
+
+.reservation-dashboard .admin-user-step-icon,
+.reservation-dashboard .admin-user-step-icon.is-amber,
+.reservation-dashboard .admin-user-step-icon.is-green,
+.reservation-dashboard .admin-user-step-icon.is-blue,
+.reservation-dashboard .admin-user-step-icon.is-red {
+  background: #1c1c1c;
+  color: #bdbdbd;
+}
+
+.reservation-dashboard .reservation-item .status-badge,
+.reservation-dashboard .reservation-modal .status-badge {
+  border-color: #3a3a3a;
+  background: #191919;
+  color: #d0d0d0;
+}
+
+.reservation-dashboard .reservation-inspect-button,
+.reservation-dashboard .reservation-modal-done {
+  border-color: #454545;
+  background: #181818;
+  color: #e0e0e0;
+}
+
+.reservation-dashboard .reservation-inspect-button:hover,
+.reservation-dashboard .reservation-modal-done:hover {
+  border-color: #686868;
+  background: #222;
+}
+
+.reservation-dashboard .reservation-progress li.is-complete,
+.reservation-dashboard .reservation-progress li.is-current {
+  color: #d0d0d0;
+}
+
+.reservation-dashboard .reservation-progress li.is-complete::after {
+  background: #4a4a4a;
+}
+
+.reservation-dashboard .reservation-progress li.is-current .reservation-progress-dot,
+.reservation-dashboard .reservation-progress li.is-complete .reservation-progress-dot {
+  border-color: #555;
+  background: #1a1a1a;
+  color: #d0d0d0;
+}
+
+.reservation-dashboard .reservation-countdown,
+.reservation-dashboard .reservation-countdown.is-started,
+.reservation-dashboard .reservation-terminal.is-danger {
+  color: #bdbdbd;
+}
+
+/* ========================================================
+   GALERÍA / IMÁGENES — Selector de imagen con vista previa
+   --------------------------------------------------------
+   Reemplaza el antiguo campo de "ruta de imagen" por un
+   selector real del dispositivo. Se usa tanto en el formulario
+   del administrador como en el de publicación del cliente.
+   ======================================================== */
+
+.image-uploader {
+  display: block;
+}
+
+.image-uploader-label {
+  display: block;
+  margin-bottom: 9px;
+  color: #cfcfcf;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.image-uploader-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.image-uploader-preview {
+  position: relative;
+  width: 190px;
+  height: 130px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px dashed #3a3a3a;
+  border-radius: 12px;
+  background: #0d0d0d;
+}
+
+.image-uploader-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-uploader-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  color: #6b6b6b;
+  font-size: 0.75rem;
+}
+
+.image-uploader-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #f5f5f5;
+  font-size: 0.75rem;
+}
+
+.image-uploader-actions {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.image-uploader-actions .admin-btn {
+  flex: 0 0 auto;
+}
+
+.image-uploader-hint,
+.image-uploader-meta {
+  margin: 0;
+  color: #8a8a8a;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.image-uploader-meta-muted {
+  color: #6b6b6b;
+}
+
+.image-uploader-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  color: #fca5a5;
+  font-size: 0.78rem;
+}
+
+.image-uploader-input {
+  display: none;
+}
+
+.is-spinning {
+  animation: sl-spin 0.9s linear infinite;
+}
+
+@keyframes sl-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================================
+   PUBLICAR VEHÍCULO — Formulario del cliente
+   ======================================================== */
+
+.publish-page .admin-card {
+  max-width: 960px;
+}
+
+.publish-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(37, 99, 235, 0.4);
+  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.1);
+  color: #bfdbfe;
+  font-size: 0.83rem;
+  line-height: 1.55;
+}
+
+.publish-notice svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.publish-success {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 16px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 12px;
+  background: rgba(74, 222, 128, 0.1);
+  color: #bbf7d0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ========================================================
+   PANEL ADMIN — Tabla: miniatura y subtítulo de celda
+   ======================================================== */
+
+.admin-table-thumb {
+  width: 54px;
+  height: 40px;
+  border-radius: 8px;
+  background: #191919;
+  object-fit: cover;
+}
+
+.admin-cell-sub {
+  display: block;
+  margin-top: 2px;
+  color: #7d7d7d;
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+/* ========================================================
+   PANEL ADMIN — Segmentado (Oficiales / DEMO / Todos)
+   ======================================================== */
+
+.admin-segment {
+  display: inline-flex;
+  padding: 4px;
+  margin-bottom: 18px;
+  border: 1px solid #2a2a2a;
+  border-radius: 11px;
+  background: #0d0d0d;
+}
+
+.admin-segment button {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #9a9a9a;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-segment button:hover {
+  color: #e5e5e5;
+}
+
+.admin-segment button.is-active {
+  background: #dc2626;
+  color: #fff;
+}
+
+/* Etiqueta para marcar registros de demostración */
+.admin-demo-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 7px;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 20px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+}
+
+/* ========================================================
+   PANEL ADMIN — Historial de actividad (3 meses)
+   ======================================================== */
+
+.admin-history-list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.admin-history-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid #262626;
+  border-radius: 12px;
+  background: #0d0d0d;
+}
+
+.admin-history-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-history-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-history-head strong {
+  color: #fff;
+  font-size: 0.92rem;
+}
+
+.admin-history-detail {
+  color: #b3b3b3;
+  font-size: 0.82rem;
+}
+
+.admin-history-states {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ========================================================
+   PANEL ADMIN — Barra de filtros del resumen
+   ======================================================== */
+
+.admin-filterbar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.admin-filterbar-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-filterbar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #cfcfcf;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-date-range {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-date-range label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #8a8a8a;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.admin-date-range input {
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  outline: none;
+  background: #0d0d0d;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.82rem;
+}
+
+.admin-date-range input:focus {
+  border-color: #dc2626;
+}
+
+.admin-preset-group {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-preset-group button {
+  padding: 7px 12px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #161616;
+  color: #bdbdbd;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-preset-group button:hover {
+  border-color: #4a4a4a;
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.admin-filterbar .admin-segment {
+  margin-bottom: 0;
+}
+
+.admin-filterbar-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: #8a8a8a;
+  font-size: 0.78rem;
+}
+
+.admin-filterbar-note strong {
+  color: #d4d4d4;
+}
+
+/* ========================================================
+   PANEL ADMIN — Comparación entre períodos
+   ======================================================== */
+
+.admin-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-compare-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid #262626;
+  border-radius: 12px;
+  background: #0d0d0d;
+}
+
+.admin-compare-label {
+  color: #8a8a8a;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-compare-value {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.admin-compare-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #8a8a8a;
+  font-size: 0.78rem;
+}
+
+.admin-compare-delta {
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+
+.admin-compare-delta.is-up {
+  background: rgba(74, 222, 128, 0.14);
+  color: #4ade80;
+}
+
+.admin-compare-delta.is-down {
+  background: rgba(220, 38, 38, 0.14);
+  color: #fca5a5;
+}
+
+/* ========================================================
+   CATÁLOGO — Metadatos de tarjeta y descripción en detalles
+   ======================================================== */
+
+.cat-card-meta {
+  display: block;
+  margin-top: 3px;
+  color: #8a8a8a;
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+.fleet-details-description {
+  margin: 0 0 16px;
+  color: #b3b3b3;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ========================================================
+   RESPONSIVE — Ajustes para las vistas nuevas
+   ======================================================== */
+
+@media (max-width: 900px) {
+  .admin-compare-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-history-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-history-states {
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .image-uploader-body {
+    flex-direction: column;
+  }
+
+  .image-uploader-preview {
+    width: 100%;
+    height: 180px;
+  }
+
+  .image-uploader-actions .admin-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-filterbar-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-date-range {
+    flex-direction: column;
+  }
+
+  .admin-segment {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .admin-segment button {
+    flex: 1;
   }
 }

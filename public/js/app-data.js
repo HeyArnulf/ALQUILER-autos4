@@ -133,7 +133,10 @@ const DataManager = (function () {
         }
     ];
 
-    // Usuarios iniciales por defecto (incluye admin y cliente)
+    // Usuarios iniciales por defecto.
+    // El ROL ya no se elige desde la interfaz: cada cuenta trae su rol fijo.
+    //   - admin@santalucia.com   / admin123   -> rol "admin"
+    //   - usuario@santalucia.com / user123     -> rol "usuario"
     const DEFAULT_USERS = [
         {
             email: 'admin@santalucia.com',
@@ -144,11 +147,11 @@ const DataManager = (function () {
             avatar: ''
         },
         {
-            email: 'cliente@santalucia.com',
-            password: 'cliente123',
+            email: 'usuario@santalucia.com',
+            password: 'user123',
             name: 'Carlos Mendoza',
             phone: '+34 612 345 678',
-            role: 'cliente',
+            role: 'usuario',
             avatar: ''
         },
         {
@@ -164,7 +167,7 @@ const DataManager = (function () {
             password: 'steven123',
             name: 'Steven Aparicio',
             phone: '+34 622 111 222',
-            role: 'cliente',
+            role: 'usuario',
             avatar: ''
         },
         {
@@ -172,7 +175,7 @@ const DataManager = (function () {
             password: 'arnulfo123',
             name: 'Arnulfo Henríquez',
             phone: '+34 633 444 555',
-            role: 'cliente',
+            role: 'usuario',
             avatar: ''
         }
     ];
@@ -255,6 +258,14 @@ const DataManager = (function () {
                 // para que los botones de "Cuentas de prueba" siempre funcionen.
                 const stored = JSON.parse(localStorage.getItem(STORAGE_KEY_USERS)) || [];
                 let changed = false;
+                // Normalización: las cuentas antiguas usaban el rol "cliente".
+                // Lo unificamos a "usuario" para que el rol derivado sea consistente.
+                stored.forEach(u => {
+                    if (u.role === 'cliente') {
+                        u.role = 'usuario';
+                        changed = true;
+                    }
+                });
                 DEFAULT_USERS.forEach(u => {
                     const exists = stored.some(x => (x.email || '').toLowerCase().trim() === u.email.toLowerCase());
                     if (!exists) {
@@ -672,7 +683,9 @@ const DataManager = (function () {
         const name = String(userData.name || '').trim();
         const phone = String(userData.phone || '').trim();
         const password = String(userData.password || '');
-        const role = userData.role || (emailNorm.includes('admin') ? 'admin' : 'cliente');
+        // Seguridad: un registro público SIEMPRE crea cuentas "usuario".
+        // El rol "admin" solo puede existir en las cuentas semilla predefinidas.
+        const role = 'usuario';
 
         if (!emailNorm || emailNorm.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNorm)) {
             return { ok: false, message: 'Ingresa un correo electrónico válido.' };
@@ -688,7 +701,7 @@ const DataManager = (function () {
         if (!password.trim() || password.length < 6 || password.length > 128) {
             return { ok: false, message: 'La contraseña debe tener entre 6 y 128 caracteres.' };
         }
-        if (!['cliente', 'admin'].includes(role)) {
+        if (!['usuario', 'admin'].includes(role)) {
             return { ok: false, message: 'Selecciona un tipo de cuenta válido.' };
         }
 
@@ -772,7 +785,7 @@ const DataManager = (function () {
             email: email,
             name: displayName.charAt(0).toUpperCase() + displayName.slice(1),
             phone: '',
-            role: email.includes('admin') ? 'admin' : 'cliente',
+            role: email.includes('admin') ? 'admin' : 'usuario',
             avatar: ''
         };
     }

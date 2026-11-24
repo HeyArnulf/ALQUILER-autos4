@@ -78,13 +78,17 @@ export const Reports = () => {
         ]
     };
 
+    const currentYear = new Date().getFullYear();
+
     const chartOptions = {
         responsive: true,
         plugins: {
             legend: { position: 'top', labels: { color: '#ffffff' } },
             title: {
                 display: true,
-                text: language === 'en' ? 'Monthly fleet performance (2026)' : 'Rendimiento Mensual de Flota (2026)',
+                text: language === 'en'
+                    ? `Monthly fleet performance (${currentYear})`
+                    : `Rendimiento Mensual de Flota (${currentYear})`,
                 color: '#ffffff',
                 font: { size: 16 }
             }

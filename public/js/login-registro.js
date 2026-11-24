@@ -129,8 +129,11 @@
     document.getElementById('successBox').classList.add('is-visible');
 
     setTimeout(() => {
-      // Redirigir según corresponda (si es admin puede ir a dashboard o index)
-      window.location.href = user.role === 'admin' ? 'dashboard.html' : 'index.html';
+      // Redirección según el rol real de la cuenta (nunca elegido por el usuario):
+      //  - admin   -> panel de administración (resumen)
+      //  - usuario -> página de usuario (inicio)
+      const destino = user.role === 'admin' ? '/?tab=admin-dashboard' : '/?tab=home';
+      window.location.href = destino;
     }, 900);
   });
 
@@ -142,7 +145,6 @@
     const name = document.getElementById('regName');
     const email = document.getElementById('regEmail');
     const phone = document.getElementById('regPhone');
-    const role = document.getElementById('regRole');
     const pass = document.getElementById('regPass');
     const pass2 = document.getElementById('regPass2');
     const terms = document.getElementById('acceptTerms');
@@ -153,7 +155,6 @@
     const nameVal = name.value.trim();
     const emailVal = email.value.trim();
     const phoneVal = phone.value.trim();
-    const roleVal = role ? role.value : 'cliente';
     const passVal = pass.value;
     const pass2Val = pass2.value;
 
@@ -161,7 +162,6 @@
       nameVal.replace(/[^\p{L}]/gu, '').length >= 3;
     const emailOk = isValidEmail(emailVal);
     const phoneOk = isValidPhone(phoneVal);
-    const roleOk = !role || ['cliente', 'admin'].includes(roleVal);
     const passOk = passVal.trim().length > 0 && passVal.length >= 6 && passVal.length <= 128;
     const matchOk = pass2Val === passVal && pass2Val.length > 0 && pass2Val.length <= 128;
     const termsOk = terms.checked;
@@ -169,22 +169,21 @@
     setInvalid(name, !nameOk);
     setInvalid(email, !emailOk);
     setInvalid(phone, !phoneOk);
-    if (role) setInvalid(role, !roleOk);
     passWrap.classList.toggle('is-invalid', !passOk);
     pass2Wrap.classList.toggle('is-invalid', !matchOk);
     termsError.classList.toggle('is-visible', !termsOk);
 
-    if(!nameOk || !emailOk || !phoneOk || !roleOk || !passOk || !matchOk || !termsOk){
+    if(!nameOk || !emailOk || !phoneOk || !passOk || !matchOk || !termsOk){
       return;
     }
 
-    // Registro en localStorage a través de DataManager
+    // Registro en localStorage a través de DataManager.
+    // El rol ya no se envía: DataManager crea SIEMPRE una cuenta "usuario".
     const regResult = DataManager.registerUser({
       name: nameVal,
       email: emailVal,
       phone: phoneVal,
-      password: passVal,
-      role: roleVal
+      password: passVal
     });
 
     if (!regResult.ok) {
@@ -197,11 +196,12 @@
 
     this.classList.add('hidden');
     document.getElementById('successTitle').textContent = '¡Cuenta creada con éxito!';
-    document.getElementById('successMsg').textContent = `Bienvenido a Santa Lucía, ${nameVal}. Tu cuenta (${roleVal.toUpperCase()}) está lista. Redirigiendo...`;
+    document.getElementById('successMsg').textContent = `Bienvenido a Santa Lucía, ${nameVal}. Tu cuenta de usuario está lista. Redirigiendo...`;
     document.getElementById('successBox').classList.add('is-visible');
 
     setTimeout(() => {
-      window.location.href = roleVal === 'admin' ? 'dashboard.html' : 'index.html';
+      // Toda cuenta nueva es de tipo "usuario": entra a la página de usuario.
+      window.location.href = '/?tab=home';
     }, 1100);
   });
 

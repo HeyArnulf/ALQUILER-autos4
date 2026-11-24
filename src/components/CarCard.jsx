@@ -1,4 +1,5 @@
 import { Button } from './Button';
+import { formatUSD, getPublicRateSummary } from '../utils/rentalPricing';
 
 export function CarCard({
     car,
@@ -23,11 +24,20 @@ export function CarCard({
                         style={{ width: '45px', height: '35px', objectFit: 'cover', borderRadius: '4px' }}
                     />
                 </td>
-                <td style={{ padding: '10px', fontWeight: 'bold', color: '#fff' }}>{car.nombre}</td>
+                <td style={{ padding: '10px', fontWeight: 'bold', color: '#fff' }}>
+                    <span style={{ display: 'block' }}>{car.nombre}</span>
+                    <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 400, color: '#737373' }}>
+                        {car.marca}{car.anio ? ` · ${car.anio}` : ''}
+                    </span>
+                </td>
                 <td style={{ padding: '10px', color: '#a3a3a3' }}>{car.categoria}</td>
-                <td style={{ padding: '10px' }}>{car.transmision}</td>
-                <td style={{ padding: '10px' }}>{car.pasajeros || 5} pax</td>
-                <td style={{ padding: '10px', fontWeight: 'bold', color: '#dc2626' }}>${car.precioDia}/día                </td>
+                <td style={{ padding: '10px' }}>{car.transmision || 'Por confirmar'}</td>
+                <td style={{ padding: '10px' }}>
+                    {car.pasajeros == null ? 'Por confirmar' : `${car.pasajeros}${car.pasajerosVerificados ? '' : ' aprox.'} pax`}
+                </td>
+                <td style={{ padding: '10px', fontWeight: 'bold', color: '#dc2626' }}>
+                    {formatUSD(car.precioDia)}/día
+                </td>
                 <td style={{ padding: '10px' }}>
                     <span style={statusStyle}>{statusName}</span>
                 </td>
@@ -52,25 +62,56 @@ export function CarCard({
         );
     }
 
+    const rates = getPublicRateSummary(car);
+    const passengerValue = car.pasajeros == null
+        ? 'Por confirmar'
+        : `${car.pasajeros}${car.pasajerosVerificados ? '' : ' aprox.'} pax`;
+    const luggageValue = car.maletas == null
+        ? 'Por confirmar'
+        : `~${car.maletas} maletas`;
+    const airConditioningValue = car.aireAcondicionado === true
+        ? 'A/C'
+        : car.aireAcondicionado === false
+            ? 'Sin A/C'
+            : 'A/C por confirmar';
     const specs = [
-        { icon: 'fas fa-cog', value: car.transmision || 'Automática' },
-        { icon: 'fas fa-users', value: car.pasajeros || 4 },
-        { icon: 'fas fa-suitcase', value: car.maletas || 2 }
+        { icon: 'fas fa-cog', label: 'Transmisión', value: car.transmision || 'Por confirmar' },
+        { icon: 'fas fa-users', label: 'Pasajeros', value: passengerValue },
+        { icon: 'fas fa-suitcase', label: 'Equipaje estimado', value: luggageValue },
+        { icon: 'fas fa-snowflake', label: 'Aire acondicionado', value: airConditioningValue },
+        { icon: 'fas fa-gas-pump', label: 'Combustible', value: car.combustible || 'Por confirmar' }
     ];
 
     return (
         <article className="rent-category-card">
             <h3 className="cat-card-title">{car.categoria || 'Sedán'}</h3>
-            <p className="cat-card-example">{car.nombre || 'Vehículo disponible'}</p>
+            <p className="cat-card-example">
+                {car.nombre || 'Vehículo disponible'}
+                <span className="cat-card-meta">
+                    {car.anio ? `Año ${car.anio}` : 'Año por confirmar'}
+                    {car.color ? ` · ${car.color}` : ''}
+                </span>
+            </p>
 
             <div className="cat-card-specs">
                 {specs.map((spec) => (
-                    <div key={`${car.id}-${spec.icon}`} className="cat-spec-item">
+                    <div key={`${car.id}-${spec.icon}`} className="cat-spec-item" title={spec.label}>
                         <i className={`${spec.icon} cat-spec-icon`} aria-hidden="true"></i>
                         <span className="cat-spec-text">{spec.value}</span>
                     </div>
                 ))}
             </div>
+
+            <div className="cat-card-pricing">
+                <div>
+                    <span className="cat-card-price-label">Tarifa diaria real</span>
+                    <strong>{formatUSD(rates.dailyRate)} <span>/día</span></strong>
+                </div>
+            </div>
+
+            {car.revisionPendiente && (
+                <p className="cat-card-review">Datos del vehículo por confirmar</p>
+            )}
 
             <div className="cat-card-image-wrap">
                 <img

@@ -3,13 +3,21 @@ import './App.css';
 import { AppProvider } from './context/AppContext.jsx';
 import { useApp } from './context/useApp.js';
 import { translateAttribute, translateText } from './i18n.js';
+import { getSession } from './services/auth.js';
 import { Fleet } from './pages/Fleet';
 import { Dashboard } from './pages/Dashboard';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminGestion } from './pages/AdminGestion';
 import { Reports } from './pages/Reports';
+import { PublicarVehiculo } from './pages/PublicarVehiculo';
 import { Home } from './pages/Home';
 import { MapaSucursales } from './components/MapaSucursales';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
+
+// Rutas que exigen sesión activa / rol admin
+const ADMIN_TABS = ['reports', 'admin-dashboard', 'admin-gestion'];
+const SESSION_TABS = ['dashboard', 'publish-car'];
 
 function AppContent() {
     const { language } = useApp();
@@ -120,9 +128,27 @@ function AppContent() {
         window.scrollTo(0, 0);
     };
 
+    // ------- PROTECCIÓN DE PÁGINAS POR ROL -------
+    // La sesión se lee de localStorage en cada render. Si la vista requiere
+    // sesión (o rol admin) y no se cumple, se expulsa al login.
+    const session = getSession();
+    const isAdmin = session?.role === 'admin';
+    const requiresAdmin = ADMIN_TABS.includes(activeTab);
+    const requiresSession = SESSION_TABS.includes(activeTab) || requiresAdmin;
+    const isBlocked = (requiresSession && !session) || (requiresAdmin && !isAdmin);
+
+    useEffect(() => {
+        if (isBlocked) {
+            window.location.replace('/login-registro.html');
+        }
+    }, [isBlocked, activeTab]);
+
     if (new URLSearchParams(window.location.search).get('embed') === 'map') {
         return <MapaSucursales />;
     }
+
+    // Mientras se redirige, no se muestra el panel restringido.
+    if (isBlocked) return null;
 
     return (
         <div className="app-shell">
@@ -133,6 +159,9 @@ function AppContent() {
                 {activeTab === 'home' && <Home onTabChange={handleTabChange} />}
                 {activeTab === 'fleet' && <Fleet />}
                 {activeTab === 'dashboard' && <Dashboard />}
+                {activeTab === 'publish-car' && <PublicarVehiculo onTabChange={handleTabChange} />}
+                {activeTab === 'admin-dashboard' && <AdminDashboard />}
+                {activeTab === 'admin-gestion' && <AdminGestion />}
                 {activeTab === 'reports' && <Reports />}
                 {activeTab === 'location' && <MapaSucursales />}
             </main>

@@ -3,9 +3,7 @@ import './SiteFooter.css';
 const quickLinks = [
     { label: 'Inicio', href: '/?tab=home', tab: 'home' },
     { label: 'Nuestra Flota', href: '/?tab=fleet', tab: 'fleet' },
-    { label: 'Oficinas', href: '/index.html' },
     { label: 'Quiénes Somos', href: '/index.html' },
-    { label: 'Nuestro Equipo', href: '/index.html' },
     { label: 'Ofertas', href: '/?tab=fleet', tab: 'fleet' }
 ];
 
@@ -14,21 +12,7 @@ const services = [
     'Corporativos',
     'Entrega a Domicilio',
     'Recogida Aeropuerto',
-    'Seguros',
-    'Asistencia 24/7'
-];
-
-const socialLinks = [
-    { label: 'Facebook', icon: 'fab fa-facebook-f', href: '#' },
-    { label: 'Instagram', icon: 'fab fa-instagram', href: '#' },
-    {
-        label: 'TikTok',
-        icon: 'fab fa-tiktok',
-        href: 'https://www.tiktok.com/@alquilersantalucia?is_from_webapp=1&sender_device=pc'
-    },
-    { label: 'X', icon: 'fab fa-x-twitter', href: '#' },
-    { label: 'YouTube', icon: 'fab fa-youtube', href: '#' },
-    { label: 'WhatsApp', icon: 'fab fa-whatsapp', href: '#' }
+    'Seguros'
 ];
 
 export function SiteFooter({ onTabChange }) {
@@ -57,21 +41,6 @@ export function SiteFooter({ onTabChange }) {
                         Alquiler de vehículos con la mejor flota y atención personalizada.
                         Muévete con libertad, estilo y confianza.
                     </p>
-                    <div className="site-footer-social">
-                        {socialLinks.map((link) => (
-                            <a
-                                key={link.label}
-                                href={link.href}
-                                title={link.label}
-                                aria-label={link.label}
-                                target={link.label === 'TikTok' ? '_blank' : undefined}
-                                rel={link.label === 'TikTok' ? 'noopener noreferrer' : undefined}
-                                onClick={link.href === '#' ? (event) => event.preventDefault() : undefined}
-                            >
-                                <i className={link.icon} aria-hidden="true" />
-                            </a>
-                        ))}
-                    </div>
                 </section>
 
                 <section className="site-footer-column">
@@ -116,7 +85,7 @@ export function SiteFooter({ onTabChange }) {
                         </li>
                         <li>
                             <i className="far fa-clock" aria-hidden="true" />
-                            <span>Lun-Sáb: 08:00 - 20:00</span>
+                            <span>Atención física: 07:00 - 18:00</span>
                         </li>
                     </ul>
                 </section>

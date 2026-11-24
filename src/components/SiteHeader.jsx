@@ -2,16 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useApp } from '../context/useApp';
 import { CarCard } from './CarCard';
 
-const DEFAULT_ADMIN_EMAIL = 'admin@santalucia.com';
-
 function getProfileStorageKey(email) {
     return `user_data_${btoa(unescape(encodeURIComponent(email || ''))).replace(/=/g, '')}`;
 }
 
-function loadProfile() {
-    const email = localStorage.getItem('usuario')
-        || sessionStorage.getItem('usuario')
-        || DEFAULT_ADMIN_EMAIL;
+// Construye el perfil completo a partir del correo de la sesión,
+// fusionando la cuenta registrada y el perfil guardado.
+// Si no hay sesión, devuelve null (no hay perfil "admin" por defecto).
+function loadProfile(email) {
+    if (!email) return null;
     const profileKey = getProfileStorageKey(email);
 
     try {
@@ -23,15 +22,13 @@ function loadProfile() {
 
         return {
             ...mergedProfile,
-            name: mergedProfile.name || (email === DEFAULT_ADMIN_EMAIL
-                ? 'Admin'
-                : emailName.charAt(0).toUpperCase() + emailName.slice(1)),
+            name: mergedProfile.name || emailName.charAt(0).toUpperCase() + emailName.slice(1),
             phone: mergedProfile.phone || '',
             avatar: mergedProfile.avatar || '',
-            role: mergedProfile.role || 'admin'
+            role: mergedProfile.role || 'usuario'
         };
     } catch {
-        return { email, name: 'Admin', phone: '', avatar: '', role: 'admin' };
+        return { email, name: email.split('@')[0], phone: '', avatar: '', role: 'usuario' };
     }
 }
 
@@ -57,7 +54,9 @@ export function SiteHeader({ activeTab, onTabChange }) {
         language,
         setLanguage
     } = useApp();
-    const profile = currentUser || loadProfile();
+    const profile = currentUser ? loadProfile(currentUser.email) : null;
+    const isAuthenticated = Boolean(profile);
+    const isAdmin = profile?.role?.toLowerCase() === 'admin';
     const [profileOpen, setProfileOpen] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -183,16 +182,13 @@ export function SiteHeader({ activeTab, onTabChange }) {
 
     const toggleSavedVehicle = toggleFavorite;
 
-    const profileName = profile.name === 'Admin'
-        ? 'Admin...'
-        : profile.name.length > 10
-            ? `${profile.name.slice(0, 9)}...`
-            : profile.name;
+    const profileName = profile
+        ? (profile.name.length > 10 ? `${profile.name.slice(0, 9)}...` : profile.name)
+        : '';
 
-    const isAdmin = profile.role?.toLowerCase() === 'admin';
     const visibleReservations = isAdmin
         ? reservations
-        : reservations.filter((item) => item.usuario?.toLowerCase() === profile.email.toLowerCase());
+        : reservations.filter((item) => item.usuario?.toLowerCase() === profile?.email?.toLowerCase());
     const savedVehicles = favorites
         .map((id) => cars.find((car) => String(car.id) === id))
         .filter(Boolean);
@@ -230,22 +226,51 @@ export function SiteHeader({ activeTab, onTabChange }) {
                             >
                                 Nuestra Flota
                             </a>
-                            <a
-                                href="/?tab=dashboard"
-                                className="site-nav-link"
-                                aria-current={activeTab === 'dashboard' ? 'page' : undefined}
-                                onClick={(event) => changeTab(event, 'dashboard')}
-                            >
-                                Panel de control
-                            </a>
-                            <a
-                                href="/?tab=reports"
-                                className="site-nav-link"
-                                aria-current={activeTab === 'reports' ? 'page' : undefined}
-                                onClick={(event) => changeTab(event, 'reports')}
-                            >
-                                Reportes
-                            </a>
+
+                            {/* Enlaces exclusivos del ADMIN */}
+                            {isAdmin && (
+                                <>
+                                    <a
+                                        href="/?tab=admin-dashboard"
+                                        className="site-nav-link"
+                                        aria-current={activeTab === 'admin-dashboard' ? 'page' : undefined}
+                                        onClick={(event) => changeTab(event, 'admin-dashboard')}
+                                    >
+                                        Resumen
+                                    </a>
+                                    <a
+                                        href="/?tab=admin-gestion"
+                                        className="site-nav-link"
+                                        aria-current={activeTab === 'admin-gestion' ? 'page' : undefined}
+                                        onClick={(event) => changeTab(event, 'admin-gestion')}
+                                    >
+                                        Gestión
+                                    </a>
+                                    <a
+                                        href="/?tab=reports"
+                                        className="site-nav-link"
+                                        aria-current={activeTab === 'reports' ? 'page' : undefined}
+                                        onClick={(event) => changeTab(event, 'reports')}
+                                    >
+                                        Reportes
+                                    </a>
+                                </>
+                            )}
+
+                            {/* Enlaces exclusivos del USUARIO (no ve Panel ni Reportes) */}
+                            {isAuthenticated && !isAdmin && (
+                                <>
+                                    <a
+                                        href="/?tab=dashboard"
+                                        className="site-nav-link"
+                                        aria-current={activeTab === 'dashboard' ? 'page' : undefined}
+                                        onClick={(event) => changeTab(event, 'dashboard')}
+                                    >
+                                        Mis reservas
+                                    </a>
+                                </>
+                            )}
+
                             <a
                                 href="/?tab=location"
                                 className="site-nav-link"
@@ -256,6 +281,15 @@ export function SiteHeader({ activeTab, onTabChange }) {
                             </a>
                         </div>
 
+                        {/* Si NO hay sesión, se muestra el acceso a "Mi Cuenta" */}
+                        {!isAuthenticated && (
+                            <a href="/login-registro.html" className="site-account-button">
+                                <i className="fas fa-user" aria-hidden="true" />
+                                <span>Mi Cuenta</span>
+                            </a>
+                        )}
+
+                        {isAuthenticated && (
                         <div className="site-profile-container" ref={profileRef}>
                             <button
                                 type="button"
@@ -283,6 +317,15 @@ export function SiteHeader({ activeTab, onTabChange }) {
                                             <i className="fas fa-user" aria-hidden="true" />
                                             Mi perfil
                                         </button>
+                                        {/* Acceso directo al panel de usuario (solo para usuarios normales) */}
+                                        {!isAdmin && (
+                                            <>
+                                                <button type="button" role="menuitem" onClick={(e) => { changeTab(e, 'dashboard'); setProfileOpen(false); }}>
+                                                    <i className="fas fa-clipboard-list" aria-hidden="true" />
+                                                    Mis reservas
+                                                </button>
+                                            </>
+                                        )}
                                         <button type="button" role="menuitem" onClick={() => { setProfilePanel('notifications'); setProfileOpen(false); }}>
                                             <i className="fas fa-bell" aria-hidden="true" />
                                             Notificaciones
@@ -319,11 +362,13 @@ export function SiteHeader({ activeTab, onTabChange }) {
                                         </div>
                                     </div>
                                     <button type="button" className="site-profile-logout" role="menuitem" onClick={logout}>
-                                        Salir
+                                        <i className="fas fa-right-from-bracket" aria-hidden="true" />
+                                        Cerrar sesión
                                     </button>
                                 </div>
                             )}
                         </div>
+                        )}
 
                         <button
                             type="button"
