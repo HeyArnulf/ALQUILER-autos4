@@ -1,0 +1,207 @@
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-alt: #eef1f5;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --border: #e2e5ea;
+  --primary: #1e3a5f;
+  --primary-hover: #17304f;
+  --on-primary: #ffffff;
+  --danger: #b42318;
+  --success: #1f7a4d;
+  --warning: #b7791f;
+  --shadow-soft: 0 1px 3px rgba(16, 24, 40, 0.08);
+  --radius-button: 4px;
+  --radius-card: 8px;
+  --content-width: 1200px;
+
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+button,
+input,
+select,
+textarea {
+  border-radius: var(--radius-button);
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 44px;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100svh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.button-primary,
+.button-secondary,
+.button-link,
+.btn-brand {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-button);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.button-primary,
+.btn-brand {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.button-primary:hover,
+.btn-brand:hover {
+  border-color: var(--primary-hover);
+  background: var(--primary-hover);
+}
+
+.button-secondary {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.button-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.button-link {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+}
+
+.button-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+label {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
